@@ -12,15 +12,15 @@ class Vuelta:
         self.cartas.append(carta)
         if self.supera_carta_actual(carta):
             self.carta_ganadora = carta
-    def supera_carta_actual(self, carta):
+    def supera_carta_actual(self, carta_nueva):
         if self.carta_ganadora is None:
             return True
         elif self.carta_ganadora.palo == self.pinta:
-            if carta.palo == self.pinta and carta.numero.value > self.carta_ganadora.numero.value:
+            if carta_nueva.palo == self.pinta and carta_nueva.numero.value > self.carta_ganadora.numero.value:
                 return True
-        elif carta.palo == self.pinta:
+        elif carta_nueva.palo == self.pinta:
             return True
-        elif carta.palo == self.palo_inicial and carta.numero.value > self.carta_ganadora.numero.value:
+        elif carta_nueva.palo == self.palo_inicial and carta_nueva.numero.value > self.carta_ganadora.numero.value:
             return True
         return False
     def adherirse_a_ganador(self):

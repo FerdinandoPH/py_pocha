@@ -26,6 +26,7 @@ class Vuelta:
     def adherirse_a_ganador(self):
         self.carta_ganadora.jugador.vueltas.append(self)
         self.ganador = self.carta_ganadora.jugador
+        return self.ganador
     def __str__(self):
         cadena = "["
         for i, carta in enumerate(self.cartas):

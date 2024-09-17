@@ -1,14 +1,15 @@
 from Carta import Carta, Palo, Numero
 from Vuelta import Vuelta
 import random
-def rotar_derecha(lista):
-    return [lista[-1]] + lista[:-1]
+def rotar_izquierda(lista):
+    return lista[1:] + [lista[0]]
 class Partida():
     def __init__(self, jugadores):
         self.jugadores = jugadores
         for jugador in self.jugadores:
             jugador.partida = self
         random.shuffle(self.jugadores)
+        self.indice_inicio_vuelta = 0
         self.ronda_actual = 0
         self.pintas_en_10 = ["OROS", "COPAS", "ESPADAS", "BASTOS", "OROS", "COPAS", "ESPADAS", "BASTOS"]
         self.pinta_actual = None
@@ -18,7 +19,10 @@ class Partida():
         for palo in Palo:
             for numero in Numero:
                 self.cartas.append(Carta(numero, palo))
+        self.cartas_backup = self.cartas.copy()
     def preparar_ronda(self):
+        self.cartas = self.cartas_backup.copy()
+        self.indice_inicio_vuelta = 0
         if self.ronda_actual == len(self.rondas):
             return False
         for jugador in self.jugadores:
@@ -37,4 +41,4 @@ class Partida():
         for jugador in self.jugadores:
             jugador.actualizar_puntos(self.num_cartas_actual)
         self.ronda_actual += 1
-        self.jugadores = rotar_derecha(self.jugadores)
+        self.jugadores = rotar_izquierda(self.jugadores)

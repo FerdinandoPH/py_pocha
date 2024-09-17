@@ -9,11 +9,21 @@ class Jugador():
     def recibir_carta(self, carta):
         carta.jugador = self
         self.mano.append(carta)
+    def ordenar_mano(self, pinta):
+        self.mano = sorted(self.mano, key=lambda carta: (carta.palo.value+(4 if carta.palo==pinta else 0), carta.numero.value))
     def obtener_cartas_jugables(self, vuelta):
         if vuelta.palo_inicial is None:
             return self.mano
         cartas_jugables = []
-        if any(vuelta.supera_carta_actual(carta) for carta in self.mano):
+        if any(vuelta.supera_carta_actual(carta) and carta.palo==vuelta.palo_inicial for carta in self.mano):
+            for carta in self.mano:
+                if vuelta.supera_carta_actual(carta) and carta.palo==vuelta.palo_inicial:
+                    cartas_jugables.append(carta)
+        elif any(carta.palo == vuelta.palo_inicial for carta in self.mano):
+            for carta in self.mano:
+                if carta.palo == vuelta.palo_inicial:
+                    cartas_jugables.append(carta)
+        elif any(vuelta.supera_carta_actual(carta) for carta in self.mano):
             for carta in self.mano:
                 if vuelta.supera_carta_actual(carta):
                     cartas_jugables.append(carta)
@@ -39,12 +49,12 @@ class Jugador():
     def __repr__(self):
         return self.__str__()
     def str_mano(self):
-        return ", ".join([carta.str_reducido() for carta in self.mano])
+        return "["+", ".join([carta.str_reducido() for carta in self.mano])+"]"
     def resetear(self):
         self.mano = []
         self.vueltas = []
         self.vueltas_ganadas_esperadas = 0
-        self.registro = Registro_puntos({"historial_puntos":[],"historial_variacion":[]})
+        #self.registro = Registro_puntos({"historial_puntos":[],"historial_variacion":[]})
 class Registro_puntos(dict):
     def __getitem__(self, key):
         if key == "puntos":

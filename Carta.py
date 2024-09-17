@@ -6,7 +6,6 @@ class Palo(Enum):
     BASTOS = 4
 class Numero(Enum):
     DOS = 2
-    TRES = 3
     CUATRO = 4
     CINCO = 5
     SEIS = 6
@@ -14,7 +13,8 @@ class Numero(Enum):
     SOTA = 10
     CABALLO = 11
     REY = 12
-    AS = 13
+    TRES = 13
+    AS = 14
 class Carta():
     def __init__(self, numero, palo, jugador=None):
         self.numero = numero

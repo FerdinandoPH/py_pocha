@@ -48,8 +48,8 @@ class Jugador():
         return f"{self.nombre} ({self.registro} puntos) : {self.str_mano()}"
     def __repr__(self):
         return self.__str__()
-    def str_mano(self):
-        return "["+", ".join([carta.str_reducido() for carta in self.mano])+"]"
+    def str_mano(self, corto = True):
+        return "["+", ".join([(carta.str_reducido() if corto else str(carta))for carta in self.mano])+"]"
     def resetear(self):
         self.mano = []
         self.vueltas = []

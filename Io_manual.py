@@ -1,3 +1,4 @@
+import sys
 class Io:
     def __init__(self):
         self.tipo = "INPUT"
@@ -11,13 +12,16 @@ class Io:
             vueltas_esperadas = -1
             while vueltas_esperadas < 0 or vueltas_esperadas > num_cartas or (i == len(jugadores)-1 and sum([jugador.vueltas_ganadas_esperadas for jugador in jugadores]) + vueltas_esperadas == num_cartas):
                 try:
-                    vueltas_esperadas = int(input(f"¿Cuántas vueltas esperas ganar, {jugador.nombre}? "))
+                    vueltas_esperadas = input(f"¿Cuántas vueltas esperas ganar, {jugador.nombre}? ")
+                    vueltas_esperadas = int(vueltas_esperadas)
                     if vueltas_esperadas < 0 or vueltas_esperadas > num_cartas:
                         print(f"Por favor, introduce un número entre 0 y {num_cartas}")
                     elif i == len(jugadores)-1 and sum([jugador.vueltas_ganadas_esperadas for jugador in jugadores]) + vueltas_esperadas == num_cartas:
                         print(f"No puedes elegir {vueltas_esperadas} vueltas porque eres postre, elige otra cosa")
                 except ValueError:
-                    print(f"Por favor, introduce un número entre 0 y {num_cartas}")
+                    if not self.comando(vueltas_esperadas,jugador):
+                        print(f"Por favor, introduce un número entre 0 y {num_cartas}")
+                    vueltas_esperadas = -1
             jugador.vueltas_ganadas_esperadas = vueltas_esperadas
     def obtener_carta_a_jugar(self,jugador,vuelta):
         print("Vuelta: ",vuelta)
@@ -32,18 +36,32 @@ class Io:
         carta_a_jugar = -1
         while carta_a_jugar < 0 or carta_a_jugar >= len(cartas_jugables):
             try:
-                carta_a_jugar = int(input(f"¿Qué carta quieres jugar, {jugador.nombre}? ")) - 1
+                carta_a_jugar = input(f"¿Qué carta quieres jugar, {jugador.nombre}? ")
+                carta_a_jugar = int(carta_a_jugar) -1
                 if carta_a_jugar < 0 or carta_a_jugar >= len(cartas_jugables):
                     print(f"Por favor, introduce un número entre 1 y {len(cartas_jugables)}")
             except ValueError:
-                print(f"Por favor, introduce un número entre 1 y {len(cartas_jugables)}")
+                if not self.comando(carta_a_jugar, jugador):
+                    print(f"Por favor, introduce un número entre 1 y {len(cartas_jugables)}")
+                carta_a_jugar = -1
+        print()
         return cartas_jugables[carta_a_jugar]
     def mostrar_stats(self, jugadores):
         jugadores_ordenados = sorted(jugadores, key=lambda jugador: jugador.registro["puntos"], reverse=True)
+        print("-----------------------------")
         for jugador in jugadores_ordenados:
             print(f"{jugador.nombre}: {len(jugador.vueltas)}/{jugador.vueltas_ganadas_esperadas}: ({"+" if jugador.registro["historial_variacion"][-1] >0 else ""}{jugador.registro["historial_variacion"][-1]}) => {jugador.registro["puntos"]}")
+        print("-----------------------------")
     def mostrar_vuelta(self, vuelta):
         print(vuelta)
-        print(f"Ahora {vuelta.ganador.nombre} tiene {len(vuelta.ganador.vueltas)}/{vuelta.ganador.vueltas_ganadas_esperadas} bazas")
+        print(f"Ahora {vuelta.ganador.nombre} tiene {len(vuelta.ganador.vueltas)}/{vuelta.ganador.vueltas_ganadas_esperadas} bazas\n")
     def anunciar_ronda(self, num_cartas, pinta):
-        print(f"Ronda con {num_cartas} vueltas, pintan {pinta.name}")
+        print(f"Ronda con {num_cartas} vueltas, pintan {pinta.name}\n")
+    def comando(self, comando, jugador):
+        if comando=="v":
+            print(jugador.str_mano(False))
+            return True
+        elif comando=="q":
+            print("Saliendo...")
+            sys.exit(0)
+        return False

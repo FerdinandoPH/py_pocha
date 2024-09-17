@@ -35,7 +35,7 @@ class Vuelta:
                 cadena += "*"
             if i < len(self.cartas) - 1:
                 cadena += ", "
-        cadena += "]"
+        cadena += "]"+(", va a "+self.palo_inicial.name if self.palo_inicial is not None else "")+", pintan "+self.pinta.name
         return cadena
     def __repr__(self):
         return self.__str__()

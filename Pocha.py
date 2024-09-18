@@ -3,8 +3,9 @@ from Jugador import Jugador
 from Vuelta import Vuelta
 from Io_manual import Io
 def main():
-    partida = Partida([Jugador("Fer"), Jugador("Alberto"), Jugador("Carlos"), Jugador("Ana")])
     io = Io()
+    #partida = Partida([Jugador("Fer"), Jugador("Alberto"), Jugador("Carlos"), Jugador("Ana")])
+    partida = Partida([Jugador(nombre) for nombre in io.obtener_jugadores()])
     while partida.preparar_ronda():
         io.anunciar_ronda(partida.num_cartas_actual, partida.pinta_actual, partida.carta_pinta_actual)
         for jugador in partida.jugadores:

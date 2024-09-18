@@ -65,3 +65,21 @@ class Io:
             print("Saliendo...")
             sys.exit(0)
         return False
+    def obtener_jugadores(self):
+        num_jug = 0
+        while num_jug not in range(3,6):
+            try:
+                num_jug = input("¿Cuántos jugadores? ")
+                num_jug = int(num_jug)
+                if num_jug not in range(3,6):
+                    print("Por favor, introduce un número entre 3 y 5")
+            except ValueError:
+                print("Por favor, introduce un número entre 3 y 5")
+                num_jug = 0
+        jugadores = []
+        for i in range(num_jug):
+            nombre = input(f"Nombre del jugador {i+1}: ")
+            jugadores.append(nombre)
+        print("Jugadores: ",[nombre for nombre in jugadores])
+        print("¡Que empiece la partida!\n")
+        return jugadores

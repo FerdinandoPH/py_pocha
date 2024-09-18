@@ -1,4 +1,3 @@
-from Carta import Carta, Palo, Numero
 class Vuelta:
     def __init__(self, pinta, carta_pinta=None):
         self.pinta = pinta

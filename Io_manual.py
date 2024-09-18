@@ -52,11 +52,11 @@ class Io:
         for jugador in jugadores_ordenados:
             print(f"{jugador.nombre}: {len(jugador.vueltas)}/{jugador.vueltas_ganadas_esperadas}: ({"+" if jugador.registro["historial_variacion"][-1] >0 else ""}{jugador.registro["historial_variacion"][-1]}) => {jugador.registro["puntos"]}")
         print("-----------------------------")
-    def mostrar_vuelta(self, vuelta):
+    def mostrar_fin_vuelta(self, vuelta):
         print(vuelta)
         print(f"Ahora {vuelta.ganador.nombre} tiene {len(vuelta.ganador.vueltas)}/{vuelta.ganador.vueltas_ganadas_esperadas} bazas\n")
-    def anunciar_ronda(self, num_cartas, pinta):
-        print(f"Ronda con {num_cartas} vueltas, pintan {pinta.name}\n")
+    def anunciar_ronda(self, num_cartas, pinta, carta_pinta):
+        print(f"Ronda con {num_cartas} vueltas, pinta{f"{" la" if carta_pinta.numero.value==10 else " el"} {str(carta_pinta)}" if carta_pinta is not None else f"n {pinta.name}"}\n")
     def comando(self, comando, jugador):
         if comando=="v":
             print(jugador.str_mano(False))

@@ -1,7 +1,8 @@
 from Carta import Carta, Palo, Numero
 class Vuelta:
-    def __init__(self, pinta):
+    def __init__(self, pinta, carta_pinta=None):
         self.pinta = pinta
+        self.carta_pinta = carta_pinta
         self.palo_inicial = None
         self.cartas = []
         self.carta_ganadora = None
@@ -35,7 +36,7 @@ class Vuelta:
                 cadena += "*"
             if i < len(self.cartas) - 1:
                 cadena += ", "
-        cadena += "]"+(", va a "+self.palo_inicial.name if self.palo_inicial is not None else "")+", pintan "+self.pinta.name
+        cadena += "]"+(", va a "+self.palo_inicial.name if self.palo_inicial is not None else "")+f", pintan "+self.pinta.name + (f" ({self.carta_pinta.str_reducido()})" if self.carta_pinta is not None else "")
         return cadena
     def __repr__(self):
         return self.__str__()

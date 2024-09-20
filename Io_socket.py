@@ -64,7 +64,7 @@ class Io_socket(Io):
         self.print(jugadores, "-----------------------------")
         for jugador in jugadores_ordenados:
             #self.print(jugadores, f"{jugador.nombre}: {len(jugador.vueltas)}/{jugador.vueltas_ganadas_esperadas}: ({"+" if jugador.registro["historial_variacion"][-1] >0 else ""}{jugador.registro["historial_variacion"][-1]}) => {jugador.registro["puntos"]}")
-            self.print(jugadores, f"{jugador.nombre}: {len(jugador.vueltas)}/{jugador.vueltas_ganadas_esperadas}: ("+("+" if jugador.registro["historial_variacion"][-1] >0 else "")+f"{jugador.registro["historial_variacion"][-1]}) => {jugador.registro["puntos"]}")
+            self.print(jugadores, f"{jugador.nombre}: {len(jugador.vueltas)}/{jugador.vueltas_ganadas_esperadas}: ("+("+" if jugador.registro["historial_variacion"][-1] >0 else "")+str(jugador.registro["historial_variacion"][-1])+") => "+jugador.registro["puntos"])
         self.print(jugadores, "-----------------------------")
     def mostrar_fin_vuelta(self, vuelta):
         self.print(self.partida.jugadores, str(vuelta))

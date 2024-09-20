@@ -47,7 +47,7 @@ class Io_socket(Io):
         self.print([no_jugador for no_jugador in self.partida.jugadores if no_jugador!=jugador], f"{jugador.nombre} está pensando...")
         cartas_jugables = jugador.obtener_cartas_jugables(vuelta)
         self.print([jugador], f"Mano: {jugador.str_mano()}")
-        self.print([jugador],f"Cartas jugables: {[f"{i}: {carta.str_reducido()}" for i,carta in enumerate(cartas_jugables,1)]}")
+        self.print([jugador],f"Cartas jugables: "+str([f"{i}: {carta.str_reducido()}" for i,carta in enumerate(cartas_jugables,1)]))
         carta_a_jugar = -1
         while carta_a_jugar < 0 or carta_a_jugar >= len(cartas_jugables):
             try:

@@ -1,8 +1,6 @@
 from Carta import Carta, Palo, Numero
 import random
-from Io_manual import Io_manual
 from Vuelta import Vuelta
-from Jugador import Jugador
 def rotar_izquierda(lista):
     return lista[1:] + [lista[0]]
 class Partida:

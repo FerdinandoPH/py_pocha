@@ -1,7 +1,3 @@
-from Carta import Carta, Palo, Numero
-import random
-from Io_manual import Io_manual
-from Vuelta import Vuelta
 from Jugador import Jugador
 from Partida import Partida
 def rotar_izquierda(lista):

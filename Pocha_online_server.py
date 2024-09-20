@@ -1,8 +1,9 @@
 from  Partida_online import Partida_online
 from Jugador_online import Jugador_online
 from Io_socket import Io_socket
-import socket, threading, random
-IP = "127.0.0.1"
+import socket, threading
+#IP = "127.0.0.1"
+IP = "192.168.1.118"
 PORT = 20225
 
 def obtener_nuevo_id(partidas):

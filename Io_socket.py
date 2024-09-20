@@ -1,6 +1,5 @@
 from Io import Io
-import socket,time
-from Jugador_online import Jugador_online
+import time
 class Io_socket(Io):
     def __init__(self, creador = None):
         super().__init__()

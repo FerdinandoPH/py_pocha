@@ -1,8 +1,4 @@
-from Carta import Carta, Palo, Numero
-import random, traceback
-from Io_manual import Io_manual
-from Vuelta import Vuelta
-from Jugador_online import Jugador_online
+import traceback
 from Partida import Partida
 def rotar_izquierda(lista):
     return lista[1:] + [lista[0]]

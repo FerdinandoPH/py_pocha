@@ -1,4 +1,4 @@
-from Jugador import Jugador, Registro_puntos
+from Jugador import Jugador
 class Jugador_online(Jugador):
     def __init__(self, nombre, conn, addr):
         self.conn = conn

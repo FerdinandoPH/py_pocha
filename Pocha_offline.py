@@ -1,6 +1,4 @@
 from Partida_offline import Partida_offline
-from Jugador import Jugador
-from Vuelta import Vuelta
 from Io_manual import Io_manual
 def main():
     io = Io_manual()

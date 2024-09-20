@@ -18,7 +18,7 @@ class Io_socket(Io):
                 print(f"Al mandar el mensaje de error a {jugador.nombre} ha ocurrido el error {e}. Ignorando...")
     def anunciar_ronda(self, jugadores, num_cartas, pinta, carta_pinta):
         #self.print(jugadores, f"Ronda con {num_cartas} vueltas, pinta{f"{" la" if carta_pinta.numero.value==10 else " el"} {str(carta_pinta)}" if carta_pinta is not None else f"n {pinta.name}"}")
-        self.print(jugadores, f"Ronda con {num_cartas} vueltas, pinta"+((" la " if carta_pinta.numero.value==10 else " el")+ str(carta_pinta) if carta_pinta is not None else f"n {pinta.name}"))
+        self.print(jugadores, f"Ronda con {num_cartas} vueltas, pinta"+((" la " if carta_pinta.numero.value==10 else " el ")+ str(carta_pinta) if carta_pinta is not None else f"n {pinta.name}"))
         #print("El orden de los jugadores es: ",[jugador.nombre for jugador in jugadores],"\n")
         self.print(jugadores, f"El orden de los jugadores es: {[jugador.nombre for jugador in jugadores]}\n")
     def recibir_input(self, jugador):
@@ -64,12 +64,8 @@ class Io_socket(Io):
         self.print(jugadores, "-----------------------------")
         for jugador in jugadores_ordenados:
             #self.print(jugadores, f"{jugador.nombre}: {len(jugador.vueltas)}/{jugador.vueltas_ganadas_esperadas}: ({"+" if jugador.registro["historial_variacion"][-1] >0 else ""}{jugador.registro["historial_variacion"][-1]}) => {jugador.registro["puntos"]}")
-            self.print(jugadores, f"{jugador.nombre}: {len(jugador.vueltas)}/{jugador.vueltas_ganadas_esperadas}: ("+("+" if jugador.registro["historial_variacion"][-1] >0 else "")+str(jugador.registro["historial_variacion"][-1])+") => "+jugador.registro["puntos"])
+            self.print(jugadores, f"{jugador.nombre}: {len(jugador.vueltas)}/{jugador.vueltas_ganadas_esperadas}: ("+("+" if jugador.registro["historial_variacion"][-1] >0 else "")+str(jugador.registro["historial_variacion"][-1])+") => "+str(jugador.registro["puntos"]))
         self.print(jugadores, "-----------------------------")
     def mostrar_fin_vuelta(self, vuelta):
         self.print(self.partida.jugadores, str(vuelta))
         self.print(self.partida.jugadores, f"Ahora {vuelta.ganador.nombre} tiene {len(vuelta.ganador.vueltas)}/{vuelta.ganador.vueltas_ganadas_esperadas} bazas\n")
-    def anunciar_ronda(self, jugadores, num_cartas, pinta, carta_pinta):
-        #self.print(jugadores, f"Ronda con {num_cartas} vueltas, pinta{f"{" la" if carta_pinta.numero.value==10 else " el"} {str(carta_pinta)}" if carta_pinta is not None else f"n {pinta.name}"}")
-        self.print(jugadores, f"Ronda con {num_cartas} vueltas, pinta"+((" la " if carta_pinta.numero.value==10 else " el")+ str(carta_pinta) if carta_pinta is not None else f"n {pinta.name}"))
-        self.print(jugadores, f"El orden de los jugadores es: {[jugador.nombre for jugador in jugadores]}\n")

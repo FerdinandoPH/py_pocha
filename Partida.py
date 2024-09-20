@@ -1,13 +1,15 @@
 from Carta import Carta, Palo, Numero
 import random
+from Io_manual import Io_manual
+from Vuelta import Vuelta
+from Jugador import Jugador
 def rotar_izquierda(lista):
     return lista[1:] + [lista[0]]
-class Partida():
-    def __init__(self, jugadores):
-        self.jugadores = jugadores
-        for jugador in self.jugadores:
-            jugador.partida = self
-        random.shuffle(self.jugadores)
+class Partida:
+    def __init__(self, io, num_jugadores=None, id=None):
+        self.num_jugadores = num_jugadores
+        io.partida = self
+        self.id = id
         self.indice_inicio_vuelta = 0
         self.ronda_actual = 0
         #self.pintas_en_10 = ["OROS", "COPAS", "ESPADAS", "BASTOS", "OROS", "COPAS", "ESPADAS", "BASTOS"]
@@ -16,7 +18,8 @@ class Partida():
         self.pinta_actual = None
         self.carta_pinta_actual = None
         self.num_cartas_actual = 0
-        self.rondas = [1,2,3,4,5,6,7,8,9,10,10,10,10,10,10,10,10,9,8,7,6,5,4,3,2,1] if len(jugadores)==4 else [1,2,3,4,5,6,7,8,8,8,8,8,8,8,8,7,6,5,4,3,2,1] if len(jugadores)==5 else [1,2,3,4,5,6,7,8,9,10,11,12,12,12,12,12,12,12,12,11,10,9,8,7,6,5,4,3,2,1]
+        self.io = io
+        self.rondas = [1,2,3,4,5,6,7,8,9,10,10,10,10,10,10,10,10,9,8,7,6,5,4,3,2,1] if self.num_jugadores==4 else [1,2,3,4,5,6,7,8,8,8,8,8,8,8,8,7,6,5,4,3,2,1] if self.num_jugadores else [1,2,3,4,5,6,7,8,9,10,11,12,12,12,12,12,12,12,12,11,10,9,8,7,6,5,4,3,2,1]
         self.cartas = []
         for palo in Palo:
             for numero in Numero:
@@ -41,6 +44,23 @@ class Partida():
         else:
             self.pinta_actual = self.pintas_en_max[self.ronda_actual-10]
         return True
+    def jugar_partida(self):
+        random.shuffle(self.jugadores)
+        while self.preparar_ronda():
+            for jugador in self.jugadores:
+                jugador.ordenar_mano(self.pinta_actual)
+            self.io.anunciar_ronda(self.jugadores, self.num_cartas_actual, self.pinta_actual, self.carta_pinta_actual)
+            self.io.obtener_vueltas_esperadas(self.jugadores,self.num_cartas_actual)
+            for i in range(self.num_cartas_actual):
+                vuelta = Vuelta(self.pinta_actual, self.carta_pinta_actual)
+                for i in range(len(self.jugadores)):
+                    jugador = self.jugadores[(self.indice_inicio_vuelta + i)%len(self.jugadores)]
+                    carta = self.io.obtener_carta_a_jugar(jugador, vuelta)
+                    jugador.jugar_carta(carta, vuelta)
+                self.indice_inicio_vuelta = self.jugadores.index(vuelta.adherirse_a_ganador())
+                self.io.mostrar_fin_vuelta(vuelta)
+            self.finalizar_ronda()
+            self.io.mostrar_stats(self.jugadores)
     def finalizar_ronda(self):
         for jugador in self.jugadores:
             jugador.actualizar_puntos(self.num_cartas_actual)

@@ -1,11 +1,12 @@
 import sys
-class Io:
+from Io import Io
+class Io_manual(Io):
     def __init__(self):
         self.tipo = "INPUT"
     def obtener_vueltas_esperadas(self,jugadores,num_cartas):
         for i,jugador in enumerate(jugadores):
             #input("Dale cuando estés solo")
-            print(f"Tu mano es {jugador.str_mano()}")
+            print(f"{jugador.nombre}, Tu mano es {jugador.str_mano()}")
                 # vueltas_esperadas = int(input(f"¿Cuántas vueltas esperas ganar, {jugador.nombre}? "))
                 # while vueltas_esperadas < 0 or vueltas_esperadas > num_cartas or (i == len(jugadores)-1 and sum([jugador.vueltas_ganadas_esperadas for jugador in jugadores]) + vueltas_esperadas == num_cartas):
                 #     vueltas_esperadas = int(input(f"Por favor, introduce un número entre 0 y {num_cartas}: " if vueltas_esperadas < 0 or vueltas_esperadas > num_cartas else f"No puedes elegir {vueltas_esperadas} vueltas porque eres postre, elige otra cosa: "))
@@ -25,6 +26,8 @@ class Io:
             jugador.vueltas_ganadas_esperadas = vueltas_esperadas
     def obtener_carta_a_jugar(self,jugador,vuelta):
         print("Vuelta: ",vuelta)
+        print(f"Turno de {jugador.nombre}")
+        
         cartas_jugables = jugador.obtener_cartas_jugables(vuelta)
         print("Bazas: ",len(jugador.vueltas),"/",jugador.vueltas_ganadas_esperadas)
         print("Mano: ",jugador.str_mano())
@@ -55,8 +58,9 @@ class Io:
     def mostrar_fin_vuelta(self, vuelta):
         print(vuelta)
         print(f"Ahora {vuelta.ganador.nombre} tiene {len(vuelta.ganador.vueltas)}/{vuelta.ganador.vueltas_ganadas_esperadas} bazas\n")
-    def anunciar_ronda(self, num_cartas, pinta, carta_pinta):
-        print(f"Ronda con {num_cartas} vueltas, pinta{f"{" la" if carta_pinta.numero.value==10 else " el"} {str(carta_pinta)}" if carta_pinta is not None else f"n {pinta.name}"}\n")
+    def anunciar_ronda(self, jugadores, num_cartas, pinta, carta_pinta):
+        print(f"Ronda con {num_cartas} vueltas, pinta{f"{" la" if carta_pinta.numero.value==10 else " el"} {str(carta_pinta)}" if carta_pinta is not None else f"n {pinta.name}"}")
+        print("El orden de los jugadores es: ",[jugador.nombre for jugador in jugadores],"\n")
     def comando(self, comando, jugador):
         if comando=="v":
             print(jugador.str_mano(False))

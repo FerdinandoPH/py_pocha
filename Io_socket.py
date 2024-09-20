@@ -70,5 +70,6 @@ class Io_socket(Io):
         self.print(self.partida.jugadores, str(vuelta))
         self.print(self.partida.jugadores, f"Ahora {vuelta.ganador.nombre} tiene {len(vuelta.ganador.vueltas)}/{vuelta.ganador.vueltas_ganadas_esperadas} bazas\n")
     def anunciar_ronda(self, jugadores, num_cartas, pinta, carta_pinta):
-        self.print(jugadores, f"Ronda con {num_cartas} vueltas, pinta{f"{" la" if carta_pinta.numero.value==10 else " el"} {str(carta_pinta)}" if carta_pinta is not None else f"n {pinta.name}"}")
+        #self.print(jugadores, f"Ronda con {num_cartas} vueltas, pinta{f"{" la" if carta_pinta.numero.value==10 else " el"} {str(carta_pinta)}" if carta_pinta is not None else f"n {pinta.name}"}")
+        self.print(jugadores, f"Ronda con {num_cartas} vueltas, pinta"+((" la " if carta_pinta.numero.value==10 else " el")+ str(carta_pinta) if carta_pinta is not None else f"n {pinta.name}"))
         self.print(jugadores, f"El orden de los jugadores es: {[jugador.nombre for jugador in jugadores]}\n")

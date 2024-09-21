@@ -14,6 +14,11 @@ def obtener_nuevo_id(partidas):
 def limpieza_partidas(partidas):
     partidas_limpias=[]
     for partida in partidas:
+        if not partida.esta_empezada:
+            try:
+                partida.creador.conn.send("C".encode("UTF-8"))
+            except Exception as e:
+                partida.esta_viva = False
         if partida.esta_viva:
             partidas_limpias.append(partida)
     return partidas_limpias

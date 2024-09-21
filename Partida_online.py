@@ -8,6 +8,7 @@ class Partida_online(Partida):
         self.jugadores = [j1]
         self.creador = j1
         self.esta_viva = True
+        self.esta_empezada = False
         self.io.print([j1], f"El id de la partida es {self.id}")
     def añadir_jugador(self, jugador):
         if len(self.jugadores) < self.num_jugadores:
@@ -19,6 +20,7 @@ class Partida_online(Partida):
         else:
             self.io.mandar_error([jugador], "NoUnir")
     def jugar_partida(self):
+        self.esta_empezada = True
         try:
             super().jugar_partida()
         except Exception as e:

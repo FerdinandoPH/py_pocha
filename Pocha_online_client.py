@@ -78,6 +78,8 @@ def main():
                     except Exception as e:
                         print(f"Error al enviar la respuesta: {e}")
                         continuar = False
+                elif data[0]=="C":
+                    pass
         s.close()
 if __name__ == "__main__":
     main()

@@ -1,12 +1,9 @@
+import socket,sys,time
 try:
-    import websockets, asyncio,sys,time, aioconsole
-except ImportError:
-    print("Instala aioconsole y websockets con pip (pip install ...)")
-# try:
-#     SERVER = "casaperezholguin.ddns.net"
-# except OSError:
-#     SERVER = "127.0.0.1"
-SERVER = "127.0.0.1"
+    SERVER = socket.gethostbyname("casaperezholguin.ddns.net")
+except OSError:
+    SERVER = "127.0.0.1"
+#SERVER = "127.0.0.1"
 PORT = 20225
 def main():
     auto = False
@@ -57,18 +54,15 @@ def main():
                     print("Por favor, introduce un número de 4 dígitos")
             except ValueError:
                 print("Por favor, introduce un número de 4 dígitos")
-    if crear_o_unir == 1:
-        mensaje =f"N{num_jugadores}{nombre}"
-    else:
-        mensaje = f"U{id}{nombre}"
-    asyncio.run(server_conn(mensaje))
-async def server_conn(mensaje):
-    uri = f"ws://{SERVER}:{PORT}"
-    async with websockets.connect(uri) as s:
-        await s.send(mensaje)
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((SERVER, PORT))
+        if crear_o_unir == 1:
+            s.send(f"N{num_jugadores}{nombre}".encode("UTF-8"))
+        else:
+            s.send(f"U{id}{nombre}".encode("UTF-8"))
         continuar = True
         while continuar:
-            data = await s.recv()
+            data = s.recv(4096).decode("UTF-8")
             if data:
                 if data[0] == "E":
                     print(f"ERROR: {data[1:]}")
@@ -76,16 +70,16 @@ async def server_conn(mensaje):
                 elif data[0] == "M":
                     print(data[1:])
                 elif data[0] == "I":
-                    respuesta = await aioconsole.ainput("Respuesta: ")
+                    respuesta = input("Respuesta: ")
                     if len(respuesta)>18:
                         respuesta = respuesta[:18]
                     try:
-                        await s.send(respuesta)
+                        s.send(respuesta.encode("UTF-8"))
                     except Exception as e:
                         print(f"Error al enviar la respuesta: {e}")
                         continuar = False
                 elif data[0]=="C":
                     pass
-        await s.close()
+        s.close()
 if __name__ == "__main__":
     main()

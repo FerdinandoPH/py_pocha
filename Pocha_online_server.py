@@ -1,53 +1,77 @@
 from  Partida_online import Partida_online
 from Jugador_online import Jugador_online
-from Io_socket import Io_socket
-import socket, threading
-#IP = "127.0.0.1"
-IP = "192.168.1.118"
+from Io_websocket import Io_websocket
+import websockets, asyncio, threading, traceback
+SERVER = "localhost"
+#IP = "192.168.1.118"
 PORT = 20225
-
-def obtener_nuevo_id(partidas):
+partidas= []
+partidas_lock = asyncio.Lock()
+async def obtener_nuevo_id(partidas, partidas_lock):
     id = 1000
-    while any(partida.id == id for partida in partidas):
-        id +=1
-    return id
-def limpieza_partidas(partidas):
+    async with partidas_lock:
+        while any(partida.id == id for partida in partidas):
+            id +=1
+        return id
+async def limpieza_partidas(partidas, partidas_lock):
     partidas_limpias=[]
-    for partida in partidas:
-        if not partida.esta_empezada:
-            try:
-                partida.creador.conn.send("C".encode("UTF-8"))
-            except Exception as e:
-                partida.esta_viva = False
-        if partida.esta_viva:
-            partidas_limpias.append(partida)
-    return partidas_limpias
-def main():
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        partidas = []
-        s.bind((IP, PORT))
-        s.listen()
-        print(f"Escuchando  en {IP}:{PORT}")
+    async with partidas_lock:
+        for partida in partidas:
+            if not partida.esta_empezada:
+                try:
+                    await partida.creador.conn.send("C")
+                except Exception as e:
+                    partida.esta_viva = False
+            if partida.esta_viva:
+                partidas_limpias.append(partida)
+        return partidas_limpias
+async def nueva_conn(conn, path):
+    try:
+        global partidas, partidas_lock
+        cola_mensajes = asyncio.Queue()
+        print("Se ha unido ", conn.remote_address)
+        datos = None
+        primera_vez = True
+        partidas = await limpieza_partidas(partidas, partidas_lock)
         while True:
-            conn, addr = s.accept()
-            print("Se ha unido ", addr)
-            data = None
-            partidas = limpieza_partidas(partidas)
-            while not data:
-                data = conn.recv(1024).decode("UTF-8")
-                if data:
-                    if data[0] == "N":
-                        partida = Partida_online(Io_socket(), int(data[1]), Jugador_online(data[2:], conn, addr), obtener_nuevo_id(partidas))
+            datos = await conn.recv()
+            if datos:
+                if primera_vez:
+                    if datos[0] == "N":
+                        
+                        partida = Partida_online(Io_websocket(), int(datos[1]), Jugador_online(datos[2:], conn, conn.remote_address, cola_mensajes), await obtener_nuevo_id(partidas, partidas_lock))
                         partida.io.partida = partida
-                        partidas.append(partida)
-                    elif data[0] == "U":
+                        await partida.creador.conn.send(f"MEl id de la partida es {partida.id}")
+                        async with partidas_lock:
+                            partidas.append(partida)
+                    elif datos[0] == "U":
                         try:
-                            partida = next(partida for partida in partidas if partida.id == int(data[1:5]))
+                            async with partidas_lock:
+                                partida = next(partida for partida in partidas if partida.id == int(datos[1:5]))
                         except StopIteration:
-                            conn.send("EPartida no encontrada".encode("UTF-8"))
+                            conn.send("EPartida no encontrada")
+                            await conn.close()
+                            break
                         else:
-                            hilo_jugador = threading.Thread(target=partida.añadir_jugador, args=(Jugador_online(data[5:], conn, addr),))
-                            hilo_jugador.daemon = True
-                            hilo_jugador.start()
+                            asyncio.create_task(partida.añadir_jugador(Jugador_online(datos[5:], conn, conn.remote_address, cola_mensajes)))
+                    primera_vez = False
+                else:
+                    cola_mensajes.put_nowait(datos)
+    except Exception as e:
+        if type(e)!=websockets.exceptions.ConnectionClosedOK:
+            traceback.print_exc()
+        partida.esta_viva = False
+        print("Manejando error...")
+        for jugador in partida.jugadores:
+            try:
+                await jugador.conn.send("EError en el servidor")
+            except Exception as e:
+                pass
+        await conn.close()
+
+async def main():
+    print("Iniciando servidor...")
+    async with websockets.serve(nueva_conn, SERVER, PORT): #type: ignore
+        await asyncio.Future()
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

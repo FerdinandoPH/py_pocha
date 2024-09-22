@@ -1,0 +1,75 @@
+<!doctype html>
+  <html>
+    <head>
+      <link rel="stylesheet" href="node_modules/@xterm/xterm/css/xterm.css" />
+      <script src="node_modules/@xterm/xterm/lib/xterm.js"></script>
+      <script src="node_modules/@xterm/addon-fit/lib/addon-fit.js"></script>
+      <script defer src="./pocha_online.js" type="text/javascript"></script>
+      <link rel="stylesheet" href="./style.css">
+    </head>
+    <body>
+      <div id="box">
+        <div id="main">
+          <div id="terminal-container">
+            <div id="terminal"></div>
+          </div>
+        </div>
+      </div>
+      <!-- <script>
+        function newPrint(text){
+          term.writeln(text);
+          term.scrollToBottom();
+        }
+        var term = new Terminal({fontSize: 30});
+        var fitAddon = new FitAddon.FitAddon();
+        term.loadAddon(fitAddon);
+        
+        var input_activado = false;
+        var input = "";
+        var input_buffer = "";
+        document.getElementById('boton').addEventListener('click', cambiarInput);
+        term.open(document.getElementById('terminal'));
+        newPrint('Hello world!');
+        for (var i = 0; i <= 100; i++) {
+          newPrint(i.toString());
+        }
+        term.onData(function(data) {
+          if (input_activado) {
+            if (data === '\r') {
+            newPrint('');
+            input=input_buffer;
+            input_buffer = "";
+            console.log("Received input is "+input)
+            }
+            else{
+              if(data === '\u007F'){
+                term.write('\b \b');
+                input_buffer = input_buffer.slice(0, -1);
+              }
+              else{
+              term.write(data);
+              input_buffer += data;
+              }
+            }
+          }
+
+        });
+        function cambiarInput() {
+        input_activado = !input_activado;
+        console.log(input_activado);
+        }
+        function fitTerminal(){
+          fitAddon.fit();
+        }
+        function alCargar(){
+          fitTerminal();
+        }
+        function alRefrescar(){
+          fitTerminal();
+        }
+        window.onload = alCargar;
+        window.onresize = alRefrescar;
+      </script> -->
+      
+    </body>
+  </html>

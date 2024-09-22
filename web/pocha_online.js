@@ -18,7 +18,7 @@ function alCargar(){
     var input = "";
     var input_buffer = "";
     //let socket = new WebSocket("ws://casaperezholguin.ddns.net:20225");
-    let socket = new WebSocket("ws://127.0.0.1:20225");
+    let socket = new WebSocket("ws://casaperezholguin.ddns.net:20225");
     socket.onopen = function(e) {
         console.log("Conexión establecida");
         socket.send(mensaje);

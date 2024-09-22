@@ -24,7 +24,8 @@ class Io_websocket(Io):
         respuesta = await jugador.cola.get()
         return respuesta
     async def obtener_vueltas_esperadas(self, jugadores, num_cartas):
-        await self.print(jugadores,f"{jugador.nombre}, tu mano es {jugador.str_mano()}")
+        for jugador in jugadores:
+            await self.print([jugador],f"{jugador.nombre}, tu mano es {jugador.str_mano()}")
         for i,jugador in enumerate(jugadores):
             await self.print([no_jugador for no_jugador in jugadores if no_jugador!=jugador], f"{jugador.nombre} está viendo cuántas pedir...")
             vueltas_esperadas = -1

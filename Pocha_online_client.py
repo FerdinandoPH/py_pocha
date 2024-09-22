@@ -6,7 +6,8 @@ except ImportError:
 #     SERVER = "casaperezholguin.ddns.net"
 # except OSError:
 #     SERVER = "127.0.0.1"
-SERVER = "127.0.0.1"
+# SERVER = "127.0.0.1"
+SERVER = "casaperezholguin.ddns.net"
 PORT = 20225
 def main():
     auto = False

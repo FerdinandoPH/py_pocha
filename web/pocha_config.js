@@ -40,7 +40,9 @@ function al_cargar(){
     var url_string = window.location.href;
     var url = new URL(url_string);
     var mensaje_error = url.searchParams.get("merror");
-    alert(mensaje_error);
+    if (mensaje_error!=null){
+        alert(mensaje_error);
+    }
     document.getElementById("boton").addEventListener("click", iniciar_juego);
     var botones_radio = document.querySelectorAll('input[name="crear_o_unir"]');
     botones_radio.forEach(function(radio){

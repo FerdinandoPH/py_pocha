@@ -2,8 +2,8 @@ from  Partida_online import Partida_online
 from Jugador_online import Jugador_online
 from Io_websocket import Io_websocket
 import websockets, asyncio, threading, traceback
-SERVER = "localhost"
-#IP = "192.168.1.118"
+#SERVER = "localhost"
+SERVER = "0.0.0.0"
 PORT = 20225
 partidas= []
 partidas_lock = asyncio.Lock()

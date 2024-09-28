@@ -49,7 +49,7 @@ async def nueva_conn(conn, path):
                             async with partidas_lock:
                                 partida = next(partida for partida in partidas if partida.id == int(datos[1:5]))
                         except StopIteration:
-                            conn.send("EPartida no encontrada")
+                            await conn.send("EPartida no encontrada")
                             await conn.close()
                             break
                         else:

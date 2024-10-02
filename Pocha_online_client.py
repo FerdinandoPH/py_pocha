@@ -1,7 +1,9 @@
 try:
     import websockets, asyncio,sys,time, aioconsole
 except ImportError:
+    import sys
     print("Instala aioconsole y websockets con pip (pip install ...)")
+    sys.exit(1)
 # try:
 #     SERVER = "casaperezholguin.ddns.net"
 # except OSError:

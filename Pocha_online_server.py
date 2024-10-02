@@ -33,7 +33,8 @@ async def nueva_conn(conn, path):
         datos = None
         primera_vez = True
         partidas = await limpieza_partidas(partidas, partidas_lock)
-        while True:
+        seguir = True
+        while seguir:
             datos = await conn.recv()
             if datos:
                 if primera_vez:
@@ -50,13 +51,13 @@ async def nueva_conn(conn, path):
                                 partida = next(partida for partida in partidas if partida.id == int(datos[1:5]))
                         except StopIteration:
                             await conn.send("EPartida no encontrada")
-                            await conn.close()
-                            break
+                            seguir = False
                         else:
                             asyncio.create_task(partida.añadir_jugador(Jugador_online(datos[5:], conn, conn.remote_address, cola_mensajes)))
                     primera_vez = False
                 else:
                     cola_mensajes.put_nowait(datos)
+        await conn.close()
     except Exception as e:
         if type(e)!=websockets.exceptions.ConnectionClosedOK:
             traceback.print_exc()

@@ -44,7 +44,8 @@ class Io_websocket(Io):
             await self.print([no_jugador for no_jugador in jugadores if no_jugador!=jugador], f"{jugador.nombre} ha pedido {jugador.vueltas_ganadas_esperadas}")
     async def obtener_carta_a_jugar(self, jugador, vuelta):
         await self.print(self.partida.jugadores, f"Vuelta: {vuelta}")
-        await self.print(self.partida.jugadores, f"Tu mano es: {jugador.str_mano()}")
+        for cada_jugador in self.partida.jugadores:
+            await self.print([cada_jugador], f"Tu mano es: {cada_jugador.str_mano()}")
         await self.print([no_jugador for no_jugador in self.partida.jugadores if no_jugador!=jugador], f"{jugador.nombre} está pensando...")
         cartas_jugables = jugador.obtener_cartas_jugables(vuelta)
         await self.print([jugador],f"Cartas jugables: "+str([f"{i}: {carta.str_reducido()}" for i,carta in enumerate(cartas_jugables,1)]))

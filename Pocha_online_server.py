@@ -52,6 +52,7 @@ async def nueva_conn(conn, path):
                         except StopIteration:
                             await conn.send("EPartida no encontrada")
                             seguir = False
+                            break
                         else:
                             asyncio.create_task(partida.añadir_jugador(Jugador_online(datos[5:], conn, conn.remote_address, cola_mensajes)))
                     primera_vez = False
